@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -78,3 +78,23 @@ class Habit(models.Model):
         help_text="привычки можно публиковать в общий доступ, чтобы другие \
 пользователи могли брать в пример чужие привычки"
     )
+
+    next_perform_at = models.DateTimeField(
+        verbose_name="Время следующего выполнения",
+        help_text="время, в которое нужно выполнить привычку в следующий раз"
+    )
+
+    def set_next_perform_at(self):
+        now = timezone.now()
+        if self.next_perform_at is None or self.next_perform_at < now:
+            if self.perform_at <= now.time():
+                day = now.today()
+            else:
+                day = now.today() + 1
+
+            self.next_perform_at = datetime(year=now.year,
+                                            month=now.month,
+                                            day=day,
+                                            hour=self.perform_at.hour,
+                                            minute=self.perform_at.hour
+                                            )
