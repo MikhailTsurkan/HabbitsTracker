@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import datetime
 
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -81,7 +81,8 @@ class Habit(models.Model):
 
     next_perform_at = models.DateTimeField(
         verbose_name="Время следующего выполнения",
-        help_text="время, в которое нужно выполнить привычку в следующий раз"
+        help_text="время, в которое нужно выполнить привычку в следующий раз",
+        **NULL
     )
 
     def set_next_perform_at(self):

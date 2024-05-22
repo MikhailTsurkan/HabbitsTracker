@@ -1,9 +1,10 @@
 from rest_framework.exceptions import ValidationError
+from habits import models
 
 
 class LeftEmptyValidator:
-    def __init__(self, fields, max_fields=None):
-        self.max_fields = max_fields or 1
+    def __init__(self, fields, fields_amount=None):
+        self.fields_amount = fields_amount or 1
         self.fields = fields
 
     def __call__(self, value):
@@ -12,15 +13,21 @@ class LeftEmptyValidator:
             if value.get(field):
                 non_empty += 1
 
-        if non_empty > self.max_fields:
-            fields_string = ", ".join(self.max_fields)
-            raise ValidationError(f"Среди полей {fields_string} может быть заполнено максимум {self.max_fields}."
+        if non_empty != self.fields_amount:
+            fields_string = ", ".join(self.fields_amount)
+            raise ValidationError(f"Среди полей {fields_string} должно быть заполнено {self.fields_amount}."
                                   f"Вы заполнили {non_empty}")
 
 
 class PleasantHabitEmptyValidator(LeftEmptyValidator):
     def __call__(self, value):
         if value.get("is_pleasant"):
+            super().__call__(value)
+
+
+class NotPleasantHabitEmptyValidator(LeftEmptyValidator):
+    def __call__(self, value):
+        if not value.get("is_pleasant"):
             super().__call__(value)
 
 
@@ -34,13 +41,14 @@ class MaxTimeValidator:
             raise ValidationError(self.message)
 
 
-class IsNotPleasantValidator:
+class IsPleasantValidator:
     message = "В качестве связанной привычки можно указать только приятную привычку"
 
     def __call__(self, value):
-
-        if not value.get("is_pleasant"):
-            raise ValidationError(self.message)
+        if value is not None:
+            habit = models.Habit.objects.get(id=value)
+            if not habit.is_pleasant:
+                raise ValidationError(self.message)
 
 
 class PeriodicityBetweenValidator:
@@ -49,5 +57,6 @@ class PeriodicityBetweenValidator:
         self._max = _max
 
     def __call__(self, value):
-        if not self._min <= value <= self._max:
-            raise ValidationError(f"Периодичность не может быть меньше {self._min} и больше {self._max} дней")
+        if value is not None:
+            if not self._min <= value <= self._max:
+                raise ValidationError(f"Периодичность не может быть меньше {self._min} и больше {self._max} дней")
