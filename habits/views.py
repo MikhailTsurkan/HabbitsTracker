@@ -14,3 +14,18 @@ class UsersHabitListAPIView(HabitListAPIView):
 
 class PublicHabitListAPIView(HabitListAPIView):
     permission_classes = [permissions.PublicListOnly]
+
+
+class HabitCreateAPIView(generics.CreateAPIView):
+    serializer_class = serializers.HabitSerializer
+
+
+class HabitUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = serializers.HabitSerializer
+    queryset = models.Habit.objects.all()
+    permission_classes = [permissions.IsOwner]
+
+
+class HabitDestroyAPIView(generics.DestroyAPIView):
+    queryset = models.Habit.objects.all()
+    permission_classes = [permissions.IsOwner]
