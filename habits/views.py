@@ -1,5 +1,5 @@
 from habits import models, serializers, permissions, paginators
-from rest_framework import generics
+from rest_framework import generics, permissions as drf_permissions
 
 
 class HabitListAPIView(generics.ListAPIView):
@@ -9,7 +9,7 @@ class HabitListAPIView(generics.ListAPIView):
 
 
 class UsersHabitListAPIView(HabitListAPIView):
-    permission_classes = [permissions.OwnerListOnly]
+    permission_classes = [drf_permissions.IsAuthenticated, permissions.OwnerListOnly]
 
 
 class PublicHabitListAPIView(HabitListAPIView):
@@ -18,14 +18,15 @@ class PublicHabitListAPIView(HabitListAPIView):
 
 class HabitCreateAPIView(generics.CreateAPIView):
     serializer_class = serializers.HabitSerializer
+    permission_classes = [drf_permissions.IsAuthenticated]
 
 
 class HabitUpdateAPIView(generics.UpdateAPIView):
     serializer_class = serializers.HabitSerializer
     queryset = models.Habit.objects.all()
-    permission_classes = [permissions.IsOwner]
+    permission_classes = [drf_permissions.IsAuthenticated, permissions.IsOwner]
 
 
 class HabitDestroyAPIView(generics.DestroyAPIView):
     queryset = models.Habit.objects.all()
-    permission_classes = [permissions.IsOwner]
+    permission_classes = [drf_permissions.IsAuthenticated, permissions.IsOwner]
