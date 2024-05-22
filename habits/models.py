@@ -54,6 +54,7 @@ class Habit(models.Model):
         verbose_name="Связанная привычка",
         help_text="привычка, которая связана с другой привычкой, \
 важно указывать для полезных привычек, но не для приятных",
+        related_name="habit",
         **NULL
     )
     periodicity = models.PositiveSmallIntegerField(
