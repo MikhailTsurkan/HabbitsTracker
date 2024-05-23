@@ -10,6 +10,9 @@ from habits.services import send_habits_tg_notifications
 
 @shared_task
 def send_telegram_messages():
+    """
+    Задача Celery для рассылки уведомлений в telegram по привычкам, время для выполнения которых наступило
+    """
     qs = models.Habit.objects.filter(next_perform_at__lt=timezone.now()).prefetch_related("user", "related_habit")
 
     send_habits_tg_notifications(habits=qs)

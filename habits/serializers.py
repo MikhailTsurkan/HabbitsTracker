@@ -6,6 +6,9 @@ from habits import models, validators
 
 
 class HabitSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор привычки
+    """
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     related_habit = serializers.IntegerField(required=False, validators=[validators.IsPleasantValidator()])
     periodicity = serializers.IntegerField(required=False, validators=[validators.PeriodicityBetweenValidator(1, 7)])

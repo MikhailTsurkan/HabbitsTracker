@@ -3,6 +3,9 @@ from django.conf import settings
 
 
 def send_telegram(message, chat_id):
+    """
+    Отправка одного сообщения в указанный чат телеграм
+    """
     params = {
         "chat_id": chat_id,
         "text": message,
@@ -14,6 +17,9 @@ def send_telegram(message, chat_id):
 
 
 def send_habits_tg_notifications(habits):
+    """
+    Отправка уведомлений в телеграм по переданным привычкам
+    """
     for habit in habits:
         reward_habit = None
         reward = None
