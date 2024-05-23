@@ -1,12 +1,15 @@
+from datetime import timedelta
+
 from rest_framework import serializers
 from habits import models, validators
 
 
 class HabitSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    related_habit = serializers.IntegerField(validators=[validators.IsPleasantValidator()])
-    periodicity = serializers.TimeField(validators=[validators.PeriodicityBetweenValidator(1, 7)])
-    perform_in = serializers.DurationField(validators=[validators.MaxTimeValidator(max_time=120)])
+    related_habit = serializers.IntegerField(required=False, validators=[validators.IsPleasantValidator()])
+    periodicity = serializers.IntegerField(required=False, validators=[validators.PeriodicityBetweenValidator(1, 7)])
+    perform_in = serializers.DurationField(validators=[validators.MaxTimeValidator(max_time=timedelta(seconds=120))])
+    next_perform_at = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = models.Habit
@@ -20,11 +23,10 @@ class HabitSerializer(serializers.ModelSerializer):
                 ]
             ),
             validators.NotPleasantHabitEmptyValidator(
-                fields_amount=3,
+                fields_amount=2,
                 fields=[
                     "perform_at",
                     "periodicity",
-                    "next_perform_at",
                 ]
             ),
             validators.PleasantHabitEmptyValidator(
@@ -34,7 +36,6 @@ class HabitSerializer(serializers.ModelSerializer):
                     "reward",
                     "perform_at",
                     "periodicity",
-                    "next_perform_at",
                 ]
             )
         ]

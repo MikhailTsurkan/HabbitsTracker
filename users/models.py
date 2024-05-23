@@ -10,7 +10,15 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(
         verbose_name='почта',
-        unique=True
+        help_text="user's email",
+        unique=True,
+    )
+    telegram_chat_id = models.CharField(
+        max_length=64,
+        verbose_name="telegram chat id",
+        help_text="id of user's tg chat",
+        blank=True,
+        null=True
     )
 
     def __str__(self):

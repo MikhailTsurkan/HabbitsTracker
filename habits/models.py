@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -90,13 +90,20 @@ class Habit(models.Model):
         now = timezone.now()
         if self.next_perform_at is None or self.next_perform_at < now:
             if self.perform_at <= now.time():
-                day = now.today()
+                day = (now.today() + timedelta(days=1)).day
             else:
-                day = now.today() + 1
+                day = now.today().day
 
-            self.next_perform_at = datetime(year=now.year,
+            self.next_perform_at = timezone.datetime(year=now.year,
                                             month=now.month,
                                             day=day,
                                             hour=self.perform_at.hour,
-                                            minute=self.perform_at.hour
+                                            minute=self.perform_at.minute,
+                                            tzinfo=timezone.get_current_timezone()
                                             )
+
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        self.set_next_perform_at()
+        super().save(force_insert, force_update, using, update_fields)

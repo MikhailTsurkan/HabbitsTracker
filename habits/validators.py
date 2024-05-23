@@ -14,7 +14,7 @@ class LeftEmptyValidator:
                 non_empty += 1
 
         if non_empty != self.fields_amount:
-            fields_string = ", ".join(self.fields_amount)
+            fields_string = ", ".join(self.fields)
             raise ValidationError(f"Среди полей {fields_string} должно быть заполнено {self.fields_amount}."
                                   f"Вы заполнили {non_empty}")
 
