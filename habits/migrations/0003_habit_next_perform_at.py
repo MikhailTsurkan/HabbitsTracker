@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('habits', '0002_alter_habit_perform_at'),
     ]
@@ -13,7 +12,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='habit',
             name='next_perform_at',
-            field=models.DateTimeField(default=None, help_text='время, в которое нужно выполнить привычку в следующий раз', verbose_name='Время следующего выполнения'),
+            field=models.DateTimeField(default=None,
+                                       help_text='время, в которое нужно выполнить привычку в следующий раз',
+                                       verbose_name='Время следующего выполнения'),
             preserve_default=False,
         ),
     ]

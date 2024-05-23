@@ -1,5 +1,6 @@
-from habits import models, serializers, permissions, paginators
 from rest_framework import generics, permissions as drf_permissions
+
+from habits import models, serializers, permissions, paginators
 
 
 class HabitListAPIView(generics.ListAPIView):

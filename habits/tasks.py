@@ -4,8 +4,8 @@ from celery import shared_task
 from django.db.models import F
 from django.utils import timezone
 
-from habits.services import send_habits_tg_notifications
 from habits import models
+from habits.services import send_habits_tg_notifications
 
 
 @shared_task

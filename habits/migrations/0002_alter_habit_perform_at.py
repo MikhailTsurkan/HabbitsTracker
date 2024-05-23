@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('habits', '0001_initial'),
     ]
@@ -13,6 +12,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='habit',
             name='perform_at',
-            field=models.TimeField(blank=True, help_text='время, когда необходимо выполнять привычку', null=True, verbose_name='Время'),
+            field=models.TimeField(blank=True, help_text='время, когда необходимо выполнять привычку', null=True,
+                                   verbose_name='Время'),
         ),
     ]

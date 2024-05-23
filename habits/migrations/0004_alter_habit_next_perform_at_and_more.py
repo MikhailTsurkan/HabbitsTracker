@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('habits', '0003_habit_next_perform_at'),
     ]
@@ -14,11 +13,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='habit',
             name='next_perform_at',
-            field=models.DateTimeField(blank=True, help_text='время, в которое нужно выполнить привычку в следующий раз', null=True, verbose_name='Время следующего выполнения'),
+            field=models.DateTimeField(blank=True,
+                                       help_text='время, в которое нужно выполнить привычку в следующий раз', null=True,
+                                       verbose_name='Время следующего выполнения'),
         ),
         migrations.AlterField(
             model_name='habit',
             name='related_habit',
-            field=models.ForeignKey(blank=True, help_text='привычка, которая связана с другой привычкой, важно указывать для полезных привычек, но не для приятных', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='habit', to='habits.habit', verbose_name='Связанная привычка'),
+            field=models.ForeignKey(blank=True,
+                                    help_text='привычка, которая связана с другой привычкой, важно указывать для полезных привычек, но не для приятных',
+                                    null=True, on_delete=django.db.models.deletion.CASCADE, related_name='habit',
+                                    to='habits.habit', verbose_name='Связанная привычка'),
         ),
     ]

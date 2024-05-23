@@ -1,11 +1,10 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 from django.utils import timezone
 
 User = get_user_model()
-
 
 NULL = {
     "null": True,
@@ -17,9 +16,11 @@ class Habit(models.Model):
     """
     Модель, описывающая привычку
     """
+
     class Meta:
         verbose_name = "Привычка"
         verbose_name_plural = "Привычки"
+        ordering = ["-id"]
 
     user = models.ForeignKey(
         User,
@@ -95,15 +96,15 @@ class Habit(models.Model):
                 day = now.today().day
 
             self.next_perform_at = timezone.datetime(year=now.year,
-                                            month=now.month,
-                                            day=day,
-                                            hour=self.perform_at.hour,
-                                            minute=self.perform_at.minute,
-                                            tzinfo=timezone.get_current_timezone()
-                                            )
+                                                     month=now.month,
+                                                     day=day,
+                                                     hour=self.perform_at.hour,
+                                                     minute=self.perform_at.minute,
+                                                     tzinfo=timezone.get_current_timezone()
+                                                     )
 
     def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
+            self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
         self.set_next_perform_at()
         super().save(force_insert, force_update, using, update_fields)
