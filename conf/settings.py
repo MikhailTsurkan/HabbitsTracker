@@ -10,9 +10,9 @@ load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -65,10 +65,11 @@ WSGI_APPLICATION = 'conf.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'OPTIONS': {
-            'service': 'habbitstracker',
-            'passfile': '.pgpass'
-        }
+        'NAME': os.getenv("POSTGRES_DB"),
+        'USER': os.getenv("POSTGRES_USER"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
+        'HOST': os.getenv("DATABASE"),
+        'PORT': os.getenv("POSTGRES_PORT"),
     }
 }
 
@@ -96,6 +97,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = "/static/" if not DEBUG else BASE_DIR / "static/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -114,17 +116,17 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000',
+    f'http://{"0.0.0.0" if ALLOWED_HOSTS[0] == "*" else ALLOWED_HOSTS[0]}:80',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000',
+    f'http://{"0.0.0.0" if ALLOWED_HOSTS[0] == "*" else ALLOWED_HOSTS[0]}:80',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False
 TELEGRAM_BOT_URL = f"https://api.telegram.org/bot{os.getenv('TELEGRAM_BOT_TOKEN')}/sendMessage"
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = f'redis://{os.getenv("BROKER")}:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = "UTC"
